@@ -1,22 +1,20 @@
-
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-@app.route('/generate', methods=['POST'])
+@app.route("/audit", methods=["POST"])
 def generate_audit():
-    data = request.json
-    brand_name = data.get('brand_name')
-    instagram_handle = data.get('instagram_handle')
+    data = request.get_json()
+    brand = data.get("brand_name")
+    handle = data.get("instagram_handle")
 
-    # Placeholder audit generation logic
-    audit = {
-        "brand": brand_name,
-        "handle": instagram_handle,
-        "summary": f"This is a basic audit report for {instagram_handle}."
-    }
+    # Basic success response (mock audit)
+    return jsonify({
+        "status": "success",
+        "brand": brand,
+        "handle": handle,
+        "message": f"Audit generated for {brand} ({handle})"
+    })
 
-    return jsonify(audit)
-
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    app.run(debug=True, host="0.0.0.0", port=5000)
