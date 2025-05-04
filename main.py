@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 import openai
 import os
-
+from openai import OpenAI
 app = Flask(__name__)
 
 openai.api_key = os.environ.get("OPENAI_API_KEY")
@@ -17,15 +17,15 @@ def generate_audit():
 
         print(f"Received request for: {brand} / {handle}")
 
-        response = openai.ChatCompletion.create(
-            model="gpt-4",
-            messages=[
-                {"role": "system", "content": "You are a premium Instagram brand strategist."},
-                {"role": "user", "content": prompt}
-            ]
-        )
+client = OpenAI()
 
-        result = response['choices'][0]['message']['content']
+response = client.chat.completions.create(
+    model="gpt-4",
+    messages=[
+        {"role": "system", "content": "You are a branding expert that audits Instagram pages."},
+        {"role": "user", "content": prompt}
+    ]
+)
         print("Generated audit:", result)
 
         return jsonify({"url": result})
