@@ -17,7 +17,7 @@ def generate_audit():
         writer = csv.writer(file)
         writer.writerow([datetime.now(), brand_name, instagram_handle])
 
-    return jsonify({'message': f'Audit request received for {brand_name} ({instagram_handle})'})
+    return jsonify({'message': f'Audit request received for {brand_name} (@{instagram_handle})'})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)
