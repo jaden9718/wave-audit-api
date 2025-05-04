@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
-import csv
-from datetime import datetime
+import openai
+import os
+
+openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 app = Flask(__name__)
 
@@ -11,13 +13,18 @@ def generate_audit():
     instagram_handle = data.get('instagram_handle')
 
     if not brand_name or not instagram_handle:
-        return jsonify({'error': 'Missing brand_name or instagram_handle'}), 400
+        return jsonify({'error': 'Missing fields'}), 400
 
-    with open('submissions_log.csv', mode='a', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow([datetime.now(), brand_name, instagram_handle])
+    prompt = f"Give a premium visual brand audit for {brand_name} on Instagram (@{instagram_handle}). Include tone of voice, visual identity, content strategy, highlight use, CTA strength, growth tips, and a closing Essentials Plan offer."
 
-    return jsonify({'message': f'Audit request received for {brand_name} (@{instagram_handle})'})
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=1000
+    )
+
+    audit_text = response.choices[0].message["content"]
+    return jsonify({'audit': audit_text})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)
