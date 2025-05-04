@@ -28,7 +28,7 @@ def generate_audit():
         result = response['choices'][0]['message']['content']
         print("Generated audit:", result)
 
-        return jsonify({"audit": result})
+        return jsonify({"url": result})
 
     except Exception as e:
         print("Error occurred:", str(e))
