@@ -19,7 +19,7 @@ def generate_audit():
         client = OpenAI(api_key=openai_api_key)
 
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4o",
             messages=[
                 {"role": "system", "content": "You are a branding expert who writes premium Instagram brand audits."},
                 {"role": "user", "content": prompt}
